@@ -29,7 +29,7 @@ func Serve(t Throttler) error {
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
 		w.Write([]byte("ok"))
-		t.Throttle(req)
+		go t.Throttle(req)
 	})
 
 	fmt.Println("Throttler UP at 3001")
