@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -70,5 +71,6 @@ func stress(amount int) {
 		log.Fatal(err)
 	}
 
-	fmt.Println(res)
+	resContent, _ := ioutil.ReadAll(res.Body)
+	fmt.Println("stress response ->", string(resContent))
 }
