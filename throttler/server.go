@@ -8,7 +8,6 @@ import (
 )
 
 type Throttler interface {
-	Forward(http.ResponseWriter, *http.Request)
 	Throttle(*http.Request)
 }
 
@@ -26,7 +25,13 @@ func forwardRequest(req *http.Request, address string) error {
 
 func Serve(t Throttler) error {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", t.Forward)
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte("ok"))
+		t.Throttle(req)
+	})
+
 	fmt.Println("Throttler UP at 3001")
 	return http.ListenAndServe(":3001", mux)
 }
