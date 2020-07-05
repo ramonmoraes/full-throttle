@@ -10,7 +10,7 @@ func protectedServer(port string) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/hello", logHandler)
 
-	fmt.Println("Listening")
+	fmt.Println("Protected up at", port)
 	err := http.ListenAndServe(port, mux)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -18,7 +18,7 @@ func protectedServer(port string) {
 }
 
 func logHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("Received")
-	w.Write([]byte("reken\n"))
+	fmt.Println("Protected server received", req)
 	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("Received"))
 }
