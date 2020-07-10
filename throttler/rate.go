@@ -3,6 +3,7 @@ package throttler
 import (
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type RateThrottler struct {
@@ -26,6 +27,8 @@ func (rt *RateThrottler) dispatchRequests(c chan *http.Request) {
 		if !ok {
 			fmt.Println("NOT OKAY MAN, NOT OKAY")
 		}
+
+		time.Sleep(time.Second / 2)
 		err := forwardRequest(req, rt.Address)
 		if err != nil {
 			fmt.Println("[ERROR]\n", err)
