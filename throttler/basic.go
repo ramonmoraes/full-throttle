@@ -11,9 +11,9 @@ type BasicThrottler struct {
 	Address string
 }
 
-func (bt BasicThrottler) Setup(req *http.Request) {}
+func (bt *BasicThrottler) Setup(req *http.Request) {}
 
-func (bt BasicThrottler) Throttle(req *http.Request) {
+func (bt *BasicThrottler) Throttle(req *http.Request) {
 	fmt.Println("Waiting one second before forwarding")
 	time.Sleep(time.Second)
 
