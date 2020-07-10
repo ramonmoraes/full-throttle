@@ -23,7 +23,11 @@ func forwardRequest(req *http.Request, address string) error {
 	req.URL = newURL
 
 	client := http.Client{}
-	_, err = client.Do(req)
+	res, err := client.Do(req)
+
+	content, err := ioutil.ReadAll(res.Body)
+	fmt.Println(string(content))
+
 	return err
 }
 
