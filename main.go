@@ -15,7 +15,7 @@ func main() {
 	port := ":3000"
 	go protectedServer(port)
 
-	go stress(3)
+	go stress(15)
 
 	anyThrottler := &throttler.RateThrottler{Address: fmt.Sprintf("http://localhost%s", port)}
 	err := throttler.Serve(anyThrottler)
