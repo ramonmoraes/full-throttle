@@ -17,8 +17,8 @@ func main() {
 
 	go stress(3)
 
-	anyThrottler := throttler.RateThrottler{Address: fmt.Sprintf("http://localhost%s", port)}
-	err := throttler.Serve(&anyThrottler)
+	anyThrottler := &throttler.RateThrottler{Address: fmt.Sprintf("http://localhost%s", port)}
+	err := throttler.Serve(anyThrottler)
 
 	if err != nil {
 		log.Fatal(err)
