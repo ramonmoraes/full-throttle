@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+var count int
+
 func protectedServer(port string) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/hello", logHandler)
@@ -19,5 +21,7 @@ func protectedServer(port string) {
 
 func logHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
-	w.Write([]byte("<-- Protected server received request"))
+	output := fmt.Sprintf("<-- Protected server received request %d", count)
+	count++
+	w.Write([]byte(output))
 }
