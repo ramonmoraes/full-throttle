@@ -18,7 +18,6 @@ func protectedServer(port string) {
 }
 
 func logHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("Protected server received", req)
 	w.Header().Set("Content-Type", "text/plain")
-	w.Write([]byte("Received"))
+	w.Write([]byte("<-- Protected server received request"))
 }
