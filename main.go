@@ -15,10 +15,10 @@ func main() {
 	port := ":3000"
 	go protectedServer(port)
 
-	go stress(1)
+	go stress(15)
 
-	basicThrottler := throttler.BasicThrottler{Address: fmt.Sprintf("http://localhost%s", port)}
-	err := throttler.Serve(basicThrottler)
+	anyThrottler := &throttler.RateThrottler{Address: fmt.Sprintf("http://localhost%s", port)}
+	err := throttler.Serve(anyThrottler)
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,25 +52,20 @@ func stress(amount int) {
 	`))
 
 	time.Sleep(1 * time.Second)
-	var err error
 
-	var res *http.Response
 	for i := 0; i < amount; i++ {
-		req, i_err := http.NewRequest("get", "http://localhost:3001/hello", json)
+		req, err := http.NewRequest("get", "http://localhost:3001/hello", json)
 		req.Header.Add("content-type", "application/json")
 
 		client := http.Client{}
-		res, i_err = client.Do(req)
+		res, err := client.Do(req)
 
-		err = i_err
-		fmt.Println(i)
+		if err != nil {
+			fmt.Println("Request error")
+			log.Fatal(err)
+		}
+
+		resContent, _ := ioutil.ReadAll(res.Body)
+		fmt.Printf("Made request n. %d -- Response: %s\n", i, resContent)
 	}
-
-	if err != nil {
-		fmt.Println("Request error")
-		log.Fatal(err)
-	}
-
-	resContent, _ := ioutil.ReadAll(res.Body)
-	fmt.Println("stress response ->", string(resContent))
 }

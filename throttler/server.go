@@ -12,6 +12,7 @@ import (
 
 type Throttler interface {
 	Throttle(*http.Request)
+	Setup()
 }
 
 func forwardRequest(req *http.Request, address string) error {
@@ -22,12 +23,17 @@ func forwardRequest(req *http.Request, address string) error {
 	req.URL = newURL
 
 	client := http.Client{}
-	_, err = client.Do(req)
+	res, err := client.Do(req)
+
+	content, err := ioutil.ReadAll(res.Body)
+	fmt.Println(string(content))
+
 	return err
 }
 
 func Serve(t Throttler) error {
 	mux := http.NewServeMux()
+	t.Setup()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
